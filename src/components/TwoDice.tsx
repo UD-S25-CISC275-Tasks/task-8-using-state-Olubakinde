@@ -6,37 +6,37 @@ export function d6(): number {
 }
 
 export function TwoDice(): React.JSX.Element {
-    const initialLeftDie = d6();
-    let initialRightDie = d6();
-    while (initialRightDie === initialLeftDie) {
-        initialRightDie = d6();
+    const [leftDie, setLeftDie] = useState(d6());
+    const [rightDie, setRightDie] = useState(d6());
+
+    while (leftDie === rightDie) {
+        setRightDie(d6());
     }
 
-    const [leftDie, setLeftDie] = useState<number>(initialLeftDie);
-    const [rightDie, setRightDie] = useState<number>(initialRightDie);
-
-    const rollLeft = () => {
+    const handleRollLeft = () => {
         setLeftDie(d6());
     };
 
-    const rollRight = () => {
+    const handleRollRight = () => {
         setRightDie(d6());
     };
 
     let message = "";
     if (leftDie === rightDie) {
-        message = leftDie === 1 ? "Lose" : "Win";
+        if (leftDie === 1) {
+            message = "Lose";
+        } else {
+            message = "Win";
+        }
     }
 
     return (
         <div>
             <span data-testid="left-die">{leftDie}</span>
             <span data-testid="right-die">{rightDie}</span>
-            <div>
-                <Button onClick={rollLeft}>Roll Left</Button>
-                <Button onClick={rollRight}>Roll Right</Button>
-            </div>
             {message && <p>{message}</p>}
+            <Button onClick={handleRollLeft}>Roll Left</Button>
+            <Button onClick={handleRollRight}>Roll Right</Button>
         </div>
     );
 }
